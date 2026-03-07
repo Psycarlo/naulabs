@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+
+# Build
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Turbo
+.turbo
+
+# Logs
+logs
+*.log
+
+# Environment
+.env
+.env.local
+!.env.example
+
+# Misc
+.DS_Store
+*.pem
+.fleet
+.idea
+.vercel
+
+# Deno
+deno.lock
+
+# Claude
+.claude/settings.local.json
