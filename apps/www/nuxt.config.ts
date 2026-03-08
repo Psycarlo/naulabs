@@ -15,5 +15,10 @@ export default defineNuxtConfig({
     prefix: 'Ui',
     componentDir: '@/components/ui'
   },
+  googleFonts: {
+    families: {
+      'Albert Sans': [400, 500, 700]
+    }
+  },
   devtools: { enabled: true }
 })
