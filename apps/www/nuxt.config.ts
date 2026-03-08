@@ -6,11 +6,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  modules: [
-    'shadcn-nuxt',
-    '@vueuse/nuxt',
-    '@nuxtjs/google-fonts'
-  ],
+  modules: ['shadcn-nuxt', '@vueuse/nuxt', '@nuxtjs/google-fonts'],
   shadcn: {
     prefix: 'Ui',
     componentDir: '@/components/ui'

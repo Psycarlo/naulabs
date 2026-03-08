@@ -1,3 +1,12 @@
 <template>
-  <h1>Hello</h1>
+  <main class="container-narrow">
+    <div class="flex flex-col gap-2 items-center pt-100">
+      <h1 class="font-bold text-5xl">Charting the AI future</h1>
+      <p class="text-lg text-muted-foreground">
+        We develop and deploy applied AI solutions to bring our partners to the
+        Intelligence Age.
+      </p>
+    </div>
+  </main>
+  <section></section>
 </template>
