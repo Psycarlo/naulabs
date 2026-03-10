@@ -10,7 +10,6 @@
 
   const COUNT = 20_000
   const SPEED_MULT = 1
-  const AUTO_SPIN = true
 
   const PARAMS: Record<string, number> = {
     scale: 30,
@@ -56,8 +55,7 @@
 
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true
-    controls.autoRotate = AUTO_SPIN
-    controls.autoRotateSpeed = -2.0
+    controls.autoRotate = false
 
     const dummy = new THREE.Object3D()
     const color = new THREE.Color()
@@ -127,7 +125,7 @@
 
         h = 0
         s = 0
-        l = 0.4 + y * 0.3
+        l = 0.2 + y * 0.2
 
         if (z < -1.1) {
           x = r2 * 0.05
@@ -153,7 +151,7 @@
 
         h = 0
         s = 0
-        l = 0.35 + oarT * 0.2
+        l = 0.15 + oarT * 0.15
       } else if (u < 0.75) {
         const sx = r1 * 0.9
         const sy = (r2 * 0.5 + 0.5) * 1.5 + 0.5
@@ -168,7 +166,7 @@
 
         h = 0
         s = 0
-        l = 0.75 + r3 * 0.1
+        l = 0.4 + r3 * 0.1
       } else {
         const subU = (u - 0.75) / 0.05
         if (subU < 0.5) {
@@ -177,7 +175,7 @@
           y = (r3 * 0.5 + 0.5) * 2.1
           h = 0
           s = 0
-          l = 0.3
+          l = 0.15
         } else {
           const shieldId = Math.floor((subU - 0.5) * 2.0 * count)
           const sIdx = Math.floor(shieldId / 15)
@@ -190,7 +188,7 @@
           z = sz + r3 * 0.03
           h = 0
           s = 0
-          l = 0.5 + Math.abs(r1) * 0.2
+          l = 0.25 + Math.abs(r1) * 0.15
         }
       }
 
@@ -213,9 +211,22 @@
       return { x: x * scale, y: y * scale, z: z * scale, h, s, l }
     }
 
+    const CAM_RADIUS = 100
+    const SWING_DEG = 12
+    const SWING_RAD = (SWING_DEG * Math.PI) / 180
+    const SWING_SPEED = 0.3
+
     const animate = () => {
       animationId = requestAnimationFrame(animate)
       const time = clock.getElapsedTime() * SPEED_MULT
+
+      // Oscillate camera between -12 and +12 degrees, facing the side
+      const baseAngle = Math.PI / 2
+      const swing = Math.sin(time * SWING_SPEED) * SWING_RAD
+      const angle = baseAngle + swing
+      camera.position.x = Math.sin(angle) * CAM_RADIUS
+      camera.position.z = Math.cos(angle) * CAM_RADIUS
+      camera.lookAt(0, 0, 0)
 
       controls.update()
 
