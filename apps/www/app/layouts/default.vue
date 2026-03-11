@@ -1,7 +1,7 @@
 <template>
   <header class="h-16 border-b">
     <nav class="flex h-full items-center justify-between container-narrow">
-      <a>logo</a>
+      <a href="/"><img src="/logo-wide.svg" alt="NauLabs" class="h-6"></a>
       <ul class="flex gap-1.5 items-center">
         <li><UiButton variant="ghost">One</UiButton></li>
         <li><UiButton variant="ghost">Two</UiButton></li>
@@ -12,5 +12,16 @@
     </nav>
   </header>
   <slot />
-  <footer></footer>
+  <footer class="border-t pt-20">
+    <div class="flex container-narrow">
+      <ul class="flex flex-col gap-4">
+        <li><img src="/logo-wide.svg" alt="NauLabs" class="h-5"></li>
+        <li>
+          <span class="text-muted-foreground text-sm">
+            Copyright © 2026 Nau Labs
+          </span>
+        </li>
+      </ul>
+    </div>
+  </footer>
 </template>
