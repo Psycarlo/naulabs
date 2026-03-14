@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      'Albert Sans': [400, 500, 700]
+      'Inter Tight': [400, 500, 700]
     }
   },
   devtools: { enabled: true }

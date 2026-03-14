@@ -10,4 +10,20 @@
     </div>
   </main>
   <section></section>
+  <section class="container-section">
+    <div
+      class="container-narrow relative h-52 w-full overflow-clip rounded-xl border border-zinc-800"
+    >
+      <div class="absolute inset-0">
+        <UiStarsBackground :factor="0.05" :speed="100" star-color="#fff" />
+      </div>
+      <div class="flex justify-center h-full flex-col gap-4 px-4">
+        <h3 class="relative z-10 text-3xl font-medium text-white max-w-lg">
+          Want to gain real-world advantage with the assistance of artificial
+          intelligence?
+        </h3>
+        <UiButton class="z-10 w-fit">Get in contact with us</UiButton>
+      </div>
+    </div>
+  </section>
 </template>
