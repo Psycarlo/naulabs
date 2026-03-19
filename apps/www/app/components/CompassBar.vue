@@ -1,5 +1,10 @@
 <template>
-  <div class="relative flex items-center justify-center overflow-hidden py-4">
+  <div
+    ref="containerRef"
+    class="relative flex cursor-grab items-center justify-center overflow-hidden py-4 active:cursor-grabbing"
+    @mousedown="onPointerDown"
+    @touchstart.passive="onTouchStart"
+  >
     <div
       class="pointer-events-none absolute inset-y-0 left-0 z-10 w-1/4 bg-linear-to-r from-background"
     />
@@ -8,96 +13,206 @@
     />
     <svg
       :viewBox="`0 0 ${TOTAL_WIDTH} ${SVG_HEIGHT}`"
-      class="h-14 w-full max-w-2xl"
+      class="h-14 w-full max-w-2xl select-none"
       aria-hidden="true"
     >
-      <line
-        v-for="(tick, i) in ticks"
-        :key="i"
-        :x1="tick.x"
-        :y1="tick.y1"
-        :x2="tick.x"
-        :y2="tick.y2"
-        class="stroke-muted-foreground/20"
-        :stroke-width="tick.type === 'degree' ? 1.5 : 1"
-        :stroke-linecap="'round'"
-      />
-      <text
-        v-for="(tick, i) in ticks.filter(t => t.label)"
-        :key="`label-${i}`"
-        :x="tick.x"
-        :y="tick.labelY"
-        text-anchor="middle"
-        class="fill-muted-foreground text-[10px] font-medium"
-        :class="tick.label === 'N' ? 'fill-foreground' : ''"
-      >
-        {{ tick.label }}
-      </text>
+      <template v-for="(tick, i) in visibleTicks" :key="i">
+        <line
+          :x1="tick.x"
+          :y1="tick.y1"
+          :x2="tick.x"
+          :y2="tick.y2"
+          class="stroke-muted-foreground/20"
+          :stroke-width="tick.type === 'degree' ? 1.5 : 1"
+          stroke-linecap="round"
+        />
+        <text
+          v-if="tick.label"
+          :x="tick.x"
+          :y="tick.labelY"
+          text-anchor="middle"
+          class="fill-muted-foreground text-[10px] font-medium"
+          :class="tick.label === 'N' ? 'fill-foreground' : ''"
+        >
+          {{ tick.label }}
+        </text>
+      </template>
     </svg>
   </div>
 </template>
 
 <script setup lang="ts">
-interface Tick {
+type VisibleTick = {
+  label?: string
+  labelY?: number
+  type: 'degree' | 'medium' | 'small'
   x: number
   y1: number
   y2: number
-  type: 'degree' | 'medium' | 'small'
-  label?: string
-  labelY?: number
 }
 
 const TOTAL_WIDTH = 600
 const SVG_HEIGHT = 50
 const CENTER_X = TOTAL_WIDTH / 2
 const CURVE_DEPTH = 12
-const TICK_COUNT = 73 // -180 to +180 in 5-degree steps
-const SPREAD = TOTAL_WIDTH * 0.9
+const VISIBLE_DEGREES = 90
+const PX_PER_DEGREE = (TOTAL_WIDTH * 0.9) / VISIBLE_DEGREES
+const DEGREES_PER_PX = 1 / PX_PER_DEGREE
+const TICK_STEP = 2.5
 
-const ticks: Tick[] = []
+const AUTO_SPEED = 2 // degrees per second
+const offset = ref(0)
+const isDragging = ref(false)
+let startX = 0
+let startOffset = 0
+let animationId: number | null = null
+let lastTime = 0
 
-for (let i = 0; i < TICK_COUNT; i++) {
-  const degree = -180 + i * 5
-  const t = i / (TICK_COUNT - 1)
-  const x = (TOTAL_WIDTH - SPREAD) / 2 + t * SPREAD
-
-  // Superellipse curve: raises the center, drops the edges
-  const normalized = (x - CENTER_X) / (SPREAD / 2)
-  const curve = CURVE_DEPTH * (1 - Math.abs(normalized) ** 2.5)
-
-  const baseY = SVG_HEIGHT * 0.55 - curve
-  const isDegreeLabel = degree % 45 === 0
-  const isMedium = degree % 15 === 0
-
-  let tickHeight: number
-  let type: Tick['type']
-
-  if (isDegreeLabel) {
-    tickHeight = 14
-    type = 'degree'
-  } else if (isMedium) {
-    tickHeight = 9
-    type = 'medium'
-  } else {
-    tickHeight = 5
-    type = 'small'
-  }
-
-  const y1 = baseY - tickHeight / 2
-  const y2 = baseY + tickHeight / 2
-
-  let label: string | undefined
-  let labelY: number | undefined
-
-  if (isDegreeLabel) {
-    if (degree === 0) {
-      label = 'N'
-    } else {
-      label = `${Math.abs(degree)}°`
+const autoRotate = (time: number) => {
+  if (lastTime) {
+    const dt = (time - lastTime) / 1000
+    if (!isDragging.value) {
+      offset.value += AUTO_SPEED * dt
     }
-    labelY = y2 + 12
+  }
+  lastTime = time
+  animationId = requestAnimationFrame(autoRotate)
+}
+
+onMounted(() => {
+  animationId = requestAnimationFrame(autoRotate)
+})
+
+onBeforeUnmount(() => {
+  if (animationId !== null) {
+    cancelAnimationFrame(animationId)
+  }
+})
+
+const wrap = (deg: number): number => ((deg % 360) + 360) % 360
+
+const isClose = (a: number, b: number): boolean => Math.abs(a - b) < 0.1
+
+const labelForDegree = (deg: number): string | undefined => {
+  const d = wrap(deg)
+  if (isClose(d, 0)) {
+    return 'N'
+  }
+  if (isClose(d, 90)) {
+    return 'E'
+  }
+  if (isClose(d, 180)) {
+    return 'S'
+  }
+  if (isClose(d, 270)) {
+    return 'W'
+  }
+  return `${d % 1 === 0 ? d : d.toFixed(1)}°`
+}
+
+const visibleTicks = computed<VisibleTick[]>(() => {
+  const result: VisibleTick[] = []
+  const centerDeg = offset.value
+  const halfRange = VISIBLE_DEGREES / 2
+
+  const startDeg = centerDeg - halfRange - 10
+  const endDeg = centerDeg + halfRange + 10
+  const firstTick = Math.floor(startDeg / TICK_STEP) * TICK_STEP
+
+  const halfWidth = (VISIBLE_DEGREES / 2) * PX_PER_DEGREE
+
+  for (let deg = firstTick; deg <= endDeg; deg += TICK_STEP) {
+    const relDeg = deg - centerDeg
+    const x = CENTER_X + relDeg * PX_PER_DEGREE
+
+    if (x < -20 || x > TOTAL_WIDTH + 20) {
+      continue
+    }
+
+    const normalized = (x - CENTER_X) / halfWidth
+    const curve = CURVE_DEPTH * (1 - Math.abs(normalized) ** 2.5)
+    const baseY = SVG_HEIGHT * 0.55 - curve
+
+    const wrappedDeg = wrap(deg)
+    const isDegreeLabel = Math.abs(wrappedDeg % 22.5) < 0.1
+    const isMedium = Math.abs(wrappedDeg % 10) < 0.1
+
+    let tickHeight: number
+    let type: VisibleTick['type']
+
+    if (isDegreeLabel) {
+      tickHeight = 14
+      type = 'degree'
+    } else if (isMedium) {
+      tickHeight = 9
+      type = 'medium'
+    } else {
+      tickHeight = 5
+      type = 'small'
+    }
+
+    const y1 = baseY - tickHeight / 2
+    const y2 = baseY + tickHeight / 2
+
+    const label = isDegreeLabel ? labelForDegree(deg) : undefined
+    const labelY = isDegreeLabel ? y2 + 12 : undefined
+
+    result.push({ x, y1, y2, type, label, labelY })
   }
 
-  ticks.push({ x, y1, y2, type, label, labelY })
+  return result
+})
+
+const onPointerDown = (e: MouseEvent) => {
+  isDragging.value = true
+  startX = e.clientX
+  startOffset = offset.value
+  window.addEventListener('mousemove', onPointerMove)
+  window.addEventListener('mouseup', onPointerUp)
 }
+
+const onTouchStart = (e: TouchEvent) => {
+  const touch = e.touches[0]
+  if (!touch) {
+    return
+  }
+  isDragging.value = true
+  startX = touch.clientX
+  startOffset = offset.value
+  window.addEventListener('touchmove', onTouchMove, { passive: true })
+  window.addEventListener('touchend', onTouchEnd)
+}
+
+const onPointerMove = (e: MouseEvent) => {
+  const dx = e.clientX - startX
+  offset.value = startOffset - dx * DEGREES_PER_PX
+}
+
+const onTouchMove = (e: TouchEvent) => {
+  const touch = e.touches[0]
+  if (!touch) {
+    return
+  }
+  const dx = touch.clientX - startX
+  offset.value = startOffset - dx * DEGREES_PER_PX
+}
+
+const onPointerUp = () => {
+  isDragging.value = false
+  window.removeEventListener('mousemove', onPointerMove)
+  window.removeEventListener('mouseup', onPointerUp)
+}
+
+const onTouchEnd = () => {
+  isDragging.value = false
+  window.removeEventListener('touchmove', onTouchMove)
+  window.removeEventListener('touchend', onTouchEnd)
+}
+
+onBeforeUnmount(() => {
+  window.removeEventListener('mousemove', onPointerMove)
+  window.removeEventListener('mouseup', onPointerUp)
+  window.removeEventListener('touchmove', onTouchMove)
+  window.removeEventListener('touchend', onTouchEnd)
+})
 </script>
