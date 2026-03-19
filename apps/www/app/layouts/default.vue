@@ -5,10 +5,9 @@
     <nav class="flex h-full items-center justify-between container-narrow">
       <a href="/"><img src="/logo-wide.svg" alt="NauLabs" class="h-6"></a>
       <ul class="flex gap-1.5 items-center">
-        <li><UiButton variant="ghost">One</UiButton></li>
-        <li><UiButton variant="ghost">Two</UiButton></li>
-        <li><UiButton variant="ghost">Three</UiButton></li>
-        <li><UiButton variant="ghost">Four</UiButton></li>
+        <li><UiButton variant="ghost">About</UiButton></li>
+        <li><UiButton variant="ghost">Services</UiButton></li>
+        <li><UiButton variant="ghost">Work</UiButton></li>
       </ul>
       <UiButton size="sm">Contact us</UiButton>
     </nav>
@@ -39,7 +38,7 @@
   <footer class="py-20 relative z-10 bg-background">
     <svg
       aria-hidden="true"
-      class="absolute top-0 left-0 w-full -translate-y-full"
+      class="absolute top-0 left-0 w-full -translate-y-[calc(100%-1px)]"
       viewBox="0 0 1440 20"
       preserveAspectRatio="none"
     >
