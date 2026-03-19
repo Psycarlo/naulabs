@@ -125,7 +125,7 @@
 
         h = 0
         s = 0
-        l = 0.2 + y * 0.2
+        l = 0.1 + y * 0.15
 
         if (z < -1.1) {
           x = r2 * 0.05
@@ -151,7 +151,7 @@
 
         h = 0
         s = 0
-        l = 0.15 + oarT * 0.15
+        l = 0.08 + oarT * 0.1
       } else if (u < 0.75) {
         const sx = r1 * 0.9
         const sy = (r2 * 0.5 + 0.5) * 1.5 + 0.5
@@ -166,7 +166,7 @@
 
         h = 0
         s = 0
-        l = 0.4 + r3 * 0.1
+        l = 0.2 + r3 * 0.08
       } else {
         const subU = (u - 0.75) / 0.05
         if (subU < 0.5) {
@@ -175,7 +175,7 @@
           y = (r3 * 0.5 + 0.5) * 2.1
           h = 0
           s = 0
-          l = 0.15
+          l = 0.08
         } else {
           const shieldId = Math.floor((subU - 0.5) * 2.0 * count)
           const sIdx = Math.floor(shieldId / 15)
@@ -188,7 +188,7 @@
           z = sz + r3 * 0.03
           h = 0
           s = 0
-          l = 0.25 + Math.abs(r1) * 0.15
+          l = 0.12 + Math.abs(r1) * 0.1
         }
       }
 

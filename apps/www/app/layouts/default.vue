@@ -14,11 +14,28 @@
     </nav>
   </header>
   <slot />
-  <h3
-    class="text-[220px] text-center font-bold text-[oklch(0.16_0_0)] [-webkit-text-stroke:2px_oklch(0.2_0_0)] -mb-7 leading-none"
+  <div
+    ref="lightContainer"
+    class="relative cursor-default select-none"
+    @mousemove="onMouseMove"
+    @mouseleave="onMouseLeave"
   >
-    Nau Labs
-  </h3>
+    <h3
+      class="text-[220px] text-center font-bold text-[oklch(0.16_0_0)] [-webkit-text-stroke:2px_oklch(0.2_0_0)] -mb-7 leading-none"
+    >
+      Nau Labs
+    </h3>
+    <h3
+      class="text-[220px] text-center font-bold text-transparent [-webkit-text-stroke:2px_oklch(0.5_0_0)] -mb-7 leading-none absolute inset-0 transition-opacity duration-300"
+      :style="{
+        opacity: lightVisible ? 1 : 0,
+        maskImage: `radial-gradient(circle 300px at ${lightX}px ${lightY}px, black, transparent)`,
+        WebkitMaskImage: `radial-gradient(circle 300px at ${lightX}px ${lightY}px, black, transparent)`,
+      }"
+    >
+      Nau Labs
+    </h3>
+  </div>
   <footer class="py-20 relative z-10 bg-background">
     <svg
       aria-hidden="true"
@@ -50,3 +67,24 @@
     </div>
   </footer>
 </template>
+
+<script setup lang="ts">
+  const lightContainer = useTemplateRef('lightContainer')
+  const lightX = ref(0)
+  const lightY = ref(0)
+  const lightVisible = ref(false)
+
+  const onMouseMove = (e: MouseEvent) => {
+    const rect = lightContainer.value?.getBoundingClientRect()
+    if (!rect) {
+      return
+    }
+    lightX.value = e.clientX - rect.left
+    lightY.value = e.clientY - rect.top
+    lightVisible.value = true
+  }
+
+  const onMouseLeave = () => {
+    lightVisible.value = false
+  }
+</script>
