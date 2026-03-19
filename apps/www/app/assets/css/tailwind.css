@@ -116,7 +116,7 @@
 }
 
 @utility container-section {
-  @apply py-12 sm:py-20
+  @apply py-16 sm:py-32;
 }
 
 @layer base {
