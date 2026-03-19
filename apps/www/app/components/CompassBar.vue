@@ -61,10 +61,14 @@ const DEGREES_PER_PX = 1 / PX_PER_DEGREE
 const TICK_STEP = 2.5
 
 const AUTO_SPEED = 2 // degrees per second
+const FRICTION = 0.95
 const offset = ref(0)
 const isDragging = ref(false)
+let velocity = 0
 let startX = 0
 let startOffset = 0
+let lastMoveX = 0
+let lastMoveTime = 0
 let animationId: number | null = null
 let lastTime = 0
 
@@ -72,7 +76,13 @@ const autoRotate = (time: number) => {
   if (lastTime) {
     const dt = (time - lastTime) / 1000
     if (!isDragging.value) {
-      offset.value += AUTO_SPEED * dt
+      if (Math.abs(velocity) > 0.5) {
+        offset.value += velocity * dt
+        velocity *= FRICTION
+      } else {
+        velocity = 0
+        offset.value += AUTO_SPEED * dt
+      }
     }
   }
   lastTime = time
@@ -163,10 +173,24 @@ const visibleTicks = computed<VisibleTick[]>(() => {
   return result
 })
 
+const trackVelocity = (clientX: number) => {
+  const now = performance.now()
+  const dt = (now - lastMoveTime) / 1000
+  if (dt > 0) {
+    const dx = (clientX - lastMoveX) * DEGREES_PER_PX
+    velocity = -dx / dt
+  }
+  lastMoveX = clientX
+  lastMoveTime = now
+}
+
 const onPointerDown = (e: MouseEvent) => {
   isDragging.value = true
+  velocity = 0
   startX = e.clientX
   startOffset = offset.value
+  lastMoveX = e.clientX
+  lastMoveTime = performance.now()
   window.addEventListener('mousemove', onPointerMove)
   window.addEventListener('mouseup', onPointerUp)
 }
@@ -177,13 +201,17 @@ const onTouchStart = (e: TouchEvent) => {
     return
   }
   isDragging.value = true
+  velocity = 0
   startX = touch.clientX
   startOffset = offset.value
+  lastMoveX = touch.clientX
+  lastMoveTime = performance.now()
   window.addEventListener('touchmove', onTouchMove, { passive: true })
   window.addEventListener('touchend', onTouchEnd)
 }
 
 const onPointerMove = (e: MouseEvent) => {
+  trackVelocity(e.clientX)
   const dx = e.clientX - startX
   offset.value = startOffset - dx * DEGREES_PER_PX
 }
@@ -193,6 +221,7 @@ const onTouchMove = (e: TouchEvent) => {
   if (!touch) {
     return
   }
+  trackVelocity(touch.clientX)
   const dx = touch.clientX - startX
   offset.value = startOffset - dx * DEGREES_PER_PX
 }
