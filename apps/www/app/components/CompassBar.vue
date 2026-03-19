@@ -81,7 +81,7 @@ const autoRotate = (time: number) => {
         velocity *= FRICTION
       } else {
         velocity = 0
-        offset.value += AUTO_SPEED * dt
+        offset.value -= AUTO_SPEED * dt
       }
     }
   }

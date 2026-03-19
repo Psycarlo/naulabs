@@ -4,12 +4,81 @@
   >
     <nav class="flex h-full items-center justify-between container-narrow">
       <a href="/"><img src="/logo-wide.svg" alt="NauLabs" class="h-6"></a>
-      <ul class="flex gap-1.5 items-center">
-        <li><UiButton variant="ghost">About</UiButton></li>
-        <li><UiButton variant="ghost">Services</UiButton></li>
-        <li><UiButton variant="ghost">Work</UiButton></li>
+      <ul class="hidden gap-1.5 items-center sm:flex">
+        <li>
+          <UiButton variant="ghost" as-child>
+            <NuxtLink to="#about"> About </NuxtLink>
+          </UiButton>
+        </li>
+        <li>
+          <UiButton variant="ghost" as-child>
+            <NuxtLink to="#services"> Services </NuxtLink>
+          </UiButton>
+        </li>
+        <li>
+          <UiButton variant="ghost" as-child>
+            <NuxtLink to="#work"> Work </NuxtLink>
+          </UiButton>
+        </li>
       </ul>
-      <UiButton size="sm">Contact us</UiButton>
+      <div class="flex items-center gap-2">
+        <UiButton size="sm">Contact us</UiButton>
+        <UiSheet>
+          <UiSheetTrigger as-child>
+            <UiButton variant="ghost" size="icon" class="sm:hidden">
+              <svg
+                aria-hidden="true"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              >
+                <line x1="2" y1="5" x2="14" y2="5" />
+                <line x1="2" y1="11" x2="14" y2="11" />
+              </svg>
+            </UiButton>
+          </UiSheetTrigger>
+          <UiSheetContent side="right" class="w-64">
+            <UiSheetHeader class="mt-2.5">
+              <UiSheetTitle>
+                <img src="/logo-wide.svg" alt="NauLabs" class="h-5">
+              </UiSheetTitle>
+            </UiSheetHeader>
+            <nav class="flex flex-col gap-1 mt-6 px-4 items-center">
+              <UiSheetClose as-child>
+                <NuxtLink
+                  to="#about"
+                  class="rounded-md py-2 font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  About
+                </NuxtLink>
+              </UiSheetClose>
+              <UiSheetClose as-child>
+                <NuxtLink
+                  to="#services"
+                  class="rounded-md py-2 font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Services
+                </NuxtLink>
+              </UiSheetClose>
+              <UiSheetClose as-child>
+                <NuxtLink
+                  to="#work"
+                  class="rounded-md py-2 font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Work
+                </NuxtLink>
+              </UiSheetClose>
+              <UiSheetClose as-child>
+                <UiButton class="mt-4 w-fit">Contact us</UiButton>
+              </UiSheetClose>
+            </nav>
+          </UiSheetContent>
+        </UiSheet>
+      </div>
     </nav>
   </header>
   <slot />
@@ -54,7 +123,7 @@
         vector-effect="non-scaling-stroke"
       />
     </svg>
-    <div class="flex container-narrow">
+    <div class="flex justify-between container-narrow">
       <ul class="flex flex-col gap-4">
         <li><img src="/logo-wide.svg" alt="NauLabs" class="h-5"></li>
         <li>
@@ -63,6 +132,9 @@
           </span>
         </li>
       </ul>
+      <UiButton variant="outline" as-child class="mt-4">
+        <NuxtLink> Contact us </NuxtLink>
+      </UiButton>
     </div>
   </footer>
 </template>

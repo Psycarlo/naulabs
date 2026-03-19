@@ -21,5 +21,10 @@ export default defineNuxtConfig({
       'Inter Tight': [400, 500, 700]
     }
   },
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth'
+    }
+  },
   devtools: { enabled: true }
 })

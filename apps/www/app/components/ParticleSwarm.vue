@@ -56,6 +56,7 @@
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true
     controls.autoRotate = false
+    controls.enableZoom = false
 
     const dummy = new THREE.Object3D()
     const color = new THREE.Color()
