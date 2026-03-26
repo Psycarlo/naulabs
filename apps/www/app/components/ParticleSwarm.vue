@@ -3,6 +3,7 @@
 </template>
 
 <script setup lang="ts">
+  // biome-ignore lint/performance/noNamespaceImport: threejs
   import * as THREE from 'three'
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
@@ -11,8 +12,10 @@
   const COUNT = 20_000
   const SPEED_MULT = 1
 
+  const isMobile = () => window.innerWidth < 768
+
   const PARAMS: Record<string, number> = {
-    scale: 30,
+    scale: isMobile() ? 19 : 30,
     waveSpeed: 0.3,
     windForce: 6.6,
     rowSpeed: 1.1
@@ -268,6 +271,7 @@
       camera.aspect = container.clientWidth / container.clientHeight
       camera.updateProjectionMatrix()
       renderer.setSize(container.clientWidth, container.clientHeight)
+      PARAMS.scale = isMobile() ? 19 : 30
     }
     window.addEventListener('resize', onResize)
 

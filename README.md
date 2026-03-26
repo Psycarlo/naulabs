@@ -1,4 +1,4 @@
-
+![naulabs](apps/www/public/og.png)
 
 ## Getting Started
 

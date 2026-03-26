@@ -22,7 +22,9 @@
         </li>
       </ul>
       <div class="flex items-center gap-2">
-        <UiButton size="sm">Contact us</UiButton>
+        <UiButton size="sm" as-child>
+          <a :href="CONTACT_URL" target="_blank" rel="noopener">Contact us</a>
+        </UiButton>
         <UiSheet>
           <UiSheetTrigger as-child>
             <UiButton variant="ghost" size="icon" class="sm:hidden">
@@ -73,7 +75,9 @@
                 </NuxtLink>
               </UiSheetClose>
               <UiSheetClose as-child>
-                <UiButton class="mt-4 w-fit">Contact us</UiButton>
+                <UiButton class="mt-4 w-fit" as-child>
+                  <a :href="CONTACT_URL" target="_blank" rel="noopener">Contact us</a>
+                </UiButton>
               </UiSheetClose>
             </nav>
           </UiSheetContent>
@@ -89,12 +93,12 @@
     @mouseleave="onMouseLeave"
   >
     <h3
-      class="text-[220px] text-center font-bold text-[oklch(0.16_0_0)] [-webkit-text-stroke:2px_oklch(0.2_0_0)] -mb-7 leading-none"
+      class="text-[87px] sm:text-[140px] md:text-[172px] lg:text-[220px] text-center font-bold text-[oklch(0.16_0_0)] [-webkit-text-stroke:2px_oklch(0.2_0_0)] -mb-4 sm:-mb-7 leading-none"
     >
       Nau Labs
     </h3>
     <h3
-      class="text-[220px] text-center font-bold text-transparent [-webkit-text-stroke:2px_oklch(0.5_0_0)] -mb-7 leading-none absolute inset-0 transition-opacity duration-300"
+      class="text-[87px] sm:text-[140px] md:text-[172px] lg:text-[220px] text-center font-bold text-transparent [-webkit-text-stroke:2px_oklch(0.5_0_0)] -mb-4 sm:-mb-7 leading-none absolute inset-0 transition-opacity duration-300"
       :style="{
         opacity: lightVisible ? 1 : 0,
         maskImage: `radial-gradient(circle 300px at ${lightX}px ${lightY}px, black, transparent)`,
@@ -133,7 +137,7 @@
         </li>
       </ul>
       <UiButton variant="outline" as-child class="mt-4">
-        <NuxtLink> Contact us </NuxtLink>
+        <a :href="CONTACT_URL" target="_blank" rel="noopener">Contact us</a>
       </UiButton>
     </div>
   </footer>

@@ -1,13 +1,17 @@
 <template>
   <main class="container-narrow relative">
-    <ClientOnly> <ParticleSwarm class="top-10!" /> </ClientOnly>
-    <div class="relative z-10 flex flex-col gap-3 items-center pt-120">
-      <h1 class="font-bold text-5xl">Charting the AI future</h1>
+    <ClientOnly> <ParticleSwarm class="-top-12! sm:top-10!" /> </ClientOnly>
+    <div class="relative z-10 flex flex-col gap-3 items-center pt-80 md:pt-120">
+      <h1 class="font-bold text-4xl sm:text-5xl text-center">
+        Charting the AI future
+      </h1>
       <p class="text-lg text-muted-foreground text-center">
         We build and deploy AI solutions to your business or home at full speed.
       </p>
       <div class="flex items-center gap-4 mt-2">
-        <UiButton size="lg" class="z-10 w-fit">Contact us</UiButton>
+        <UiButton size="lg" class="z-10 w-fit" as-child>
+          <a :href="CONTACT_URL" target="_blank" rel="noopener">Contact us</a>
+        </UiButton>
         <UiButton size="lg" variant="ghost" class="z-10 w-fit group">
           See our work
           <AnimatedChevron />
@@ -46,7 +50,7 @@
         </p>
         <CompassBar />
         <UiButton variant="ghost" as-child class="mt-4">
-          <NuxtLink> Let's work together </NuxtLink>
+          <a :href="CONTACT_URL" target="_blank" rel="noopener">Let's work together</a>
         </UiButton>
       </div>
     </div>
@@ -115,19 +119,23 @@
     </div>
   </section>
   <!-- <section id="work" class="container-narrow container-section"></section> -->
-  <section class="container-section">
+  <section class="container-section container-narrow">
     <div
-      class="container-narrow relative h-52 w-full overflow-clip rounded-xl border border-zinc-800"
+      class="relative h-fit py-8 px-2 w-full overflow-clip rounded-xl border border-zinc-800"
     >
       <div class="absolute inset-0">
         <UiStarsBackground :factor="0.05" :speed="100" star-color="#fff" />
       </div>
       <div class="flex justify-center h-full flex-col gap-4 px-4">
-        <h3 class="relative z-10 text-3xl font-medium text-white max-w-lg">
+        <h3
+          class="relative z-10 text-2xl sm:text-3xl font-medium text-white max-w-lg"
+        >
           Want to gain real-world advantage with the assistance of artificial
           intelligence?
         </h3>
-        <UiButton class="z-10 w-fit">Get in contact with us</UiButton>
+        <UiButton class="z-10 w-fit" as-child>
+          <a :href="CONTACT_URL" target="_blank" rel="noopener">Get in contact with us</a>
+        </UiButton>
       </div>
     </div>
   </section>
