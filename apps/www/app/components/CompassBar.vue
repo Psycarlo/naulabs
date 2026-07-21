@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-type VisibleTick = {
+interface VisibleTick {
   label?: string
   labelY?: number
   type: 'degree' | 'medium' | 'small'
@@ -60,7 +60,8 @@ const PX_PER_DEGREE = (TOTAL_WIDTH * 0.9) / VISIBLE_DEGREES
 const DEGREES_PER_PX = 1 / PX_PER_DEGREE
 const TICK_STEP = 2.5
 
-const AUTO_SPEED = 2 // degrees per second
+// degrees per second
+const AUTO_SPEED = 2
 const FRICTION = 0.95
 const offset = ref(0)
 const isDragging = ref(false)
@@ -167,7 +168,7 @@ const visibleTicks = computed<VisibleTick[]>(() => {
     const label = isDegreeLabel ? labelForDegree(deg) : undefined
     const labelY = isDegreeLabel ? y2 + 12 : undefined
 
-    result.push({ x, y1, y2, type, label, labelY })
+    result.push({ label, labelY, type, x, y1, y2 })
   }
 
   return result
@@ -184,32 +185,6 @@ const trackVelocity = (clientX: number) => {
   lastMoveTime = now
 }
 
-const onPointerDown = (e: MouseEvent) => {
-  isDragging.value = true
-  velocity = 0
-  startX = e.clientX
-  startOffset = offset.value
-  lastMoveX = e.clientX
-  lastMoveTime = performance.now()
-  window.addEventListener('mousemove', onPointerMove)
-  window.addEventListener('mouseup', onPointerUp)
-}
-
-const onTouchStart = (e: TouchEvent) => {
-  const touch = e.touches[0]
-  if (!touch) {
-    return
-  }
-  isDragging.value = true
-  velocity = 0
-  startX = touch.clientX
-  startOffset = offset.value
-  lastMoveX = touch.clientX
-  lastMoveTime = performance.now()
-  window.addEventListener('touchmove', onTouchMove, { passive: true })
-  window.addEventListener('touchend', onTouchEnd)
-}
-
 const onPointerMove = (e: MouseEvent) => {
   trackVelocity(e.clientX)
   const dx = e.clientX - startX
@@ -217,7 +192,7 @@ const onPointerMove = (e: MouseEvent) => {
 }
 
 const onTouchMove = (e: TouchEvent) => {
-  const touch = e.touches[0]
+  const [touch] = e.touches
   if (!touch) {
     return
   }
@@ -236,6 +211,32 @@ const onTouchEnd = () => {
   isDragging.value = false
   window.removeEventListener('touchmove', onTouchMove)
   window.removeEventListener('touchend', onTouchEnd)
+}
+
+const onPointerDown = (e: MouseEvent) => {
+  isDragging.value = true
+  velocity = 0
+  startX = e.clientX
+  startOffset = offset.value
+  lastMoveX = e.clientX
+  lastMoveTime = performance.now()
+  window.addEventListener('mousemove', onPointerMove)
+  window.addEventListener('mouseup', onPointerUp)
+}
+
+const onTouchStart = (e: TouchEvent) => {
+  const [touch] = e.touches
+  if (!touch) {
+    return
+  }
+  isDragging.value = true
+  velocity = 0
+  startX = touch.clientX
+  startOffset = offset.value
+  lastMoveX = touch.clientX
+  lastMoveTime = performance.now()
+  window.addEventListener('touchmove', onTouchMove, { passive: true })
+  window.addEventListener('touchend', onTouchEnd)
 }
 
 onBeforeUnmount(() => {

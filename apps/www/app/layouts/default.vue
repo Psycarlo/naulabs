@@ -3,7 +3,7 @@
     class="sticky top-0 z-50 h-16 border-b backdrop-blur-xl bg-background/50"
   >
     <nav class="flex h-full items-center justify-between container-narrow">
-      <a href="/"><img src="/logo-wide.svg" alt="NauLabs" class="h-6"></a>
+      <a href="/"><img src="/logo-wide.svg" alt="NauLabs" class="h-6" /></a>
       <ul class="hidden gap-1.5 items-center sm:flex">
         <li>
           <UiButton variant="ghost" as-child>
@@ -46,7 +46,7 @@
           <UiSheetContent side="right" class="w-64">
             <UiSheetHeader class="mt-2.5">
               <UiSheetTitle>
-                <img src="/logo-wide.svg" alt="NauLabs" class="h-5">
+                <img src="/logo-wide.svg" alt="NauLabs" class="h-5" />
               </UiSheetTitle>
             </UiSheetHeader>
             <nav class="flex flex-col gap-1 mt-6 px-4 items-center">
@@ -76,7 +76,9 @@
               </UiSheetClose>
               <UiSheetClose as-child>
                 <UiButton class="mt-4 w-fit" as-child>
-                  <a :href="CONTACT_URL" target="_blank" rel="noopener">Contact us</a>
+                  <a :href="CONTACT_URL" target="_blank" rel="noopener"
+                    >Contact us</a
+                  >
                 </UiButton>
               </UiSheetClose>
             </nav>
@@ -102,7 +104,7 @@
       :style="{
         opacity: lightVisible ? 1 : 0,
         maskImage: `radial-gradient(circle 300px at ${lightX}px ${lightY}px, black, transparent)`,
-        WebkitMaskImage: `radial-gradient(circle 300px at ${lightX}px ${lightY}px, black, transparent)`,
+        WebkitMaskImage: `radial-gradient(circle 300px at ${lightX}px ${lightY}px, black, transparent)`
       }"
     >
       Nau Labs
@@ -129,7 +131,7 @@
     </svg>
     <div class="flex justify-between container-narrow">
       <ul class="flex flex-col gap-4">
-        <li><img src="/logo-wide.svg" alt="NauLabs" class="h-5"></li>
+        <li><img src="/logo-wide.svg" alt="NauLabs" class="h-5" /></li>
         <li>
           <span class="text-muted-foreground text-sm">
             Copyright © 2026 Nau Labs
@@ -144,22 +146,22 @@
 </template>
 
 <script setup lang="ts">
-  const lightContainer = useTemplateRef('lightContainer')
-  const lightX = ref(0)
-  const lightY = ref(0)
-  const lightVisible = ref(false)
+const lightContainer = useTemplateRef('lightContainer')
+const lightX = ref(0)
+const lightY = ref(0)
+const lightVisible = ref(false)
 
-  const onMouseMove = (e: MouseEvent) => {
-    const rect = lightContainer.value?.getBoundingClientRect()
-    if (!rect) {
-      return
-    }
-    lightX.value = e.clientX - rect.left
-    lightY.value = e.clientY - rect.top
-    lightVisible.value = true
+const onMouseMove = (e: MouseEvent) => {
+  const rect = lightContainer.value?.getBoundingClientRect()
+  if (!rect) {
+    return
   }
+  lightX.value = e.clientX - rect.left
+  lightY.value = e.clientY - rect.top
+  lightVisible.value = true
+}
 
-  const onMouseLeave = () => {
-    lightVisible.value = false
-  }
+const onMouseLeave = () => {
+  lightVisible.value = false
+}
 </script>

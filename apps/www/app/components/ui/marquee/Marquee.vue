@@ -1,45 +1,45 @@
 <script lang="ts" setup>
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
 const props = withDefaults(
   defineProps<{
-    class?: string;
-    reverse?: boolean;
-    slowOnHover?: boolean;
-    vertical?: boolean;
-    repeat?: number;
+    class?: string
+    reverse?: boolean
+    slowOnHover?: boolean
+    vertical?: boolean
+    repeat?: number
   }>(),
   {
-    slowOnHover: false,
-    vertical: false,
     repeat: 4,
-  },
-);
+    slowOnHover: false,
+    vertical: false
+  }
+)
 
-const containerRef = useTemplateRef("containerRef");
+const containerRef = useTemplateRef('containerRef')
 
 const setPlaybackRate = (rate: number) => {
   if (!containerRef.value) {
-    return;
+    return
   }
-  for (const el of containerRef.value.querySelectorAll(".marquee-track")) {
+  for (const el of containerRef.value.querySelectorAll('.marquee-track')) {
     for (const anim of el.getAnimations()) {
-      anim.playbackRate = rate;
+      anim.playbackRate = rate
     }
   }
-};
+}
 
 const onMouseEnter = () => {
   if (props.slowOnHover) {
-    setPlaybackRate(0.25);
+    setPlaybackRate(0.25)
   }
-};
+}
 
 const onMouseLeave = () => {
   if (props.slowOnHover) {
-    setPlaybackRate(1);
+    setPlaybackRate(1)
   }
-};
+}
 </script>
 
 <template>
@@ -49,7 +49,7 @@ const onMouseLeave = () => {
       cn(
         `flex gap-(--gap) overflow-hidden p-2 [--duration:40s] [--gap:1rem]`,
         vertical ? 'flex-col' : 'flex-row',
-        $props.class,
+        $props.class
       )
     "
     @mouseenter="onMouseEnter"
@@ -59,12 +59,14 @@ const onMouseLeave = () => {
       v-for="index in repeat"
       :key="index"
       :style="{
-        animationDirection: reverse ? 'reverse' : 'normal',
+        animationDirection: reverse ? 'reverse' : 'normal'
       }"
       :class="
         cn(
           `marquee-track flex shrink-0 justify-around gap-(--gap)`,
-          vertical ? 'animate-marquee-vertical flex-col' : 'animate-marquee flex-row',
+          vertical
+            ? 'animate-marquee-vertical flex-col'
+            : 'animate-marquee flex-row'
         )
       "
     >

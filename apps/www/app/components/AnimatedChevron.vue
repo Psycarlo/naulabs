@@ -23,11 +23,11 @@
 </template>
 
 <script setup lang="ts">
-  type AnimatedChevronProps = {
-    direction?: 'left' | 'right'
-  }
+interface AnimatedChevronProps {
+  direction?: 'left' | 'right'
+}
 
-  const props = withDefaults(defineProps<AnimatedChevronProps>(), {
-    direction: 'right'
-  })
+const props = withDefaults(defineProps<AnimatedChevronProps>(), {
+  direction: 'right'
+})
 </script>

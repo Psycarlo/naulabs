@@ -50,7 +50,9 @@
         </p>
         <CompassBar />
         <UiButton variant="ghost" as-child class="mt-4">
-          <a :href="CONTACT_URL" target="_blank" rel="noopener">Let's work together</a>
+          <a :href="CONTACT_URL" target="_blank" rel="noopener"
+            >Let's work together</a
+          >
         </UiButton>
       </div>
     </div>
@@ -134,7 +136,9 @@
           intelligence?
         </h3>
         <UiButton class="z-10 w-fit" as-child>
-          <a :href="CONTACT_URL" target="_blank" rel="noopener">Get in contact with us</a>
+          <a :href="CONTACT_URL" target="_blank" rel="noopener"
+            >Get in contact with us</a
+          >
         </UiButton>
       </div>
     </div>
@@ -142,17 +146,17 @@
 </template>
 
 <script setup lang="ts">
-  const tools = [
-    { name: 'Openclaw', link: 'https://openclaw.ai' },
-    { name: 'Claude', link: 'https://claude.ai' },
-    { name: 'Gemini', link: 'https://gemini.google.com' },
-    { name: 'OpenAI', link: 'https://openai.com' },
-    { name: 'Vercel AI', link: 'https://sdk.vercel.ai' },
-    { name: 'Eleven Labs', link: 'https://elevenlabs.io' },
-    {
-      name: 'Nano Banana',
-      link: 'https://gemini.google/overview/image-generation'
-    },
-    { name: 'Kling AI', link: 'https://app.klingai.com/' }
-  ]
+const tools = [
+  { link: 'https://openclaw.ai', name: 'Openclaw' },
+  { link: 'https://claude.ai', name: 'Claude' },
+  { link: 'https://gemini.google.com', name: 'Gemini' },
+  { link: 'https://openai.com', name: 'OpenAI' },
+  { link: 'https://sdk.vercel.ai', name: 'Vercel AI' },
+  { link: 'https://elevenlabs.io', name: 'Eleven Labs' },
+  {
+    link: 'https://gemini.google/overview/image-generation',
+    name: 'Nano Banana'
+  },
+  { link: 'https://app.klingai.com/', name: 'Kling AI' }
+]
 </script>

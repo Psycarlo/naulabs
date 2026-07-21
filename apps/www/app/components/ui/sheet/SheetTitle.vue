@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import type { DialogTitleProps } from "reka-ui"
-import type { HTMLAttributes } from "vue"
-import { reactiveOmit } from "@vueuse/core"
-import { DialogTitle } from "reka-ui"
-import { cn } from "@/lib/utils"
+import { reactiveOmit } from '@vueuse/core'
+import type { DialogTitleProps } from 'reka-ui'
+import { DialogTitle } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
 
-const props = defineProps<DialogTitleProps & { class?: HTMLAttributes["class"] }>()
+import { cn } from '@/lib/utils'
 
-const delegatedProps = reactiveOmit(props, "class")
+const props = defineProps<
+  DialogTitleProps & { class?: HTMLAttributes['class'] }
+>()
+
+const delegatedProps = reactiveOmit(props, 'class')
 </script>
 
 <template>

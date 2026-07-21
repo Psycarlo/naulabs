@@ -1,11 +1,13 @@
 <template>
-  <NuxtLayout> <NuxtPage /> </NuxtLayout>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-  useHead({
-    htmlAttrs: {
-      class: 'dark'
-    }
-  })
+useHead({
+  htmlAttrs: {
+    class: 'dark'
+  }
+})
 </script>
