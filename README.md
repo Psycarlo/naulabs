@@ -17,5 +17,5 @@ bun install
 ### Run
 
 ```bash
-bun --filter www devs
+bun --filter www dev
 ```
